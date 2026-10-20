@@ -146,6 +146,45 @@ def test_hard_links_count_bytes_once(tmp_path):
     assert counted["value"] == 10
 
 
+def test_path_stat_fallback_retains_hard_link_metadata(tmp_path):
+    root = tmp_path / "input"
+    root.mkdir()
+    (root / "a.bin").write_bytes(b"hello")
+    try:
+        os.link(root / "a.bin", root / "b.bin")
+    except OSError:
+        pytest.skip("Hard links unavailable")
+    scanner = Scanner(root, tmp_path / "chunks", ScanOptions(size="logical"))
+    scanner._stat_by_path = True
+    with patch("disk_treemap.scanner.os.stat", wraps=os.stat) as observed:
+        tree = scanner.scan()
+    assert tree["value"] == 5
+    assert scanner.stats.hard_links == 1
+    assert all(call.kwargs.get("follow_symlinks") is False for call in observed.call_args_list)
+
+
+def test_windows_junction_metadata_is_treated_as_a_link(tmp_path):
+    import stat
+    from types import SimpleNamespace
+
+    root = tmp_path / "input"
+    (root / "junction").mkdir(parents=True)
+    (root / "junction" / "must-not-scan").write_text("outside")
+    scanner = Scanner(root, tmp_path / "chunks", ScanOptions())
+    scanner._stat_by_path = True
+    junction_info = SimpleNamespace(
+        st_reparse_tag=0xA0000003,
+        st_mode=stat.S_IFDIR,
+        st_size=0,
+        st_blocks=0,
+    )
+    with patch("disk_treemap.scanner.os.stat", return_value=junction_info):
+        tree = scanner.scan()
+    assert scanner.stats.directories == 1
+    assert scanner.stats.files == 1
+    assert children(tree)["junction"]["isSymlink"] is True
+
+
 def test_chunks_preserve_all_children(tmp_path):
     root = tmp_path / "input"
     root.mkdir()
