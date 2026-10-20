@@ -16,6 +16,26 @@ The placeholders in this file must remain placeholders; never substitute a real
 tree before committing it. The Python package includes this template so users
 do not need Node to install from Git or from a wheel.
 
+## Dependency updates
+
+Dependabot checks npm and uv weekly, and GitHub Actions monthly. Python updates
+use the native uv ecosystem so `pyproject.toml` and `uv.lock` stay consistent.
+Minor and patch updates are grouped; major updates remain separate and require
+manual review. This also applies to pre-1.0 minor updates, which can break APIs:
+the full test suite must still pass, but tests cannot prove compatibility.
+
+The auto-merge workflow only accepts same-repository PRs authored by
+`dependabot[bot]`, reads their verified update metadata and enables GitHub's
+native squash auto-merge for minor/patch updates. It never checks out PR code
+with write permissions. Major or unclassified updates are not auto-merged.
+
+Repository settings must enable auto-merge and protect `main` with the required
+`All checks` status from GitHub Actions, with branches up to date before merging.
+That status requires every Python/platform job and the viewer job to succeed;
+failed, skipped or cancelled test jobs block merging. Administrators are also
+subject to protection. A dependency change that changes the bundled viewer must
+include a rebuilt template; the reproducibility check will block it otherwise.
+
 ## Release checklist
 
 1. Run all CLI/layout/browser tests, `npm audit`, Ruff, Prettier and `twine check`.
