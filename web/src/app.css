@@ -1,0 +1,205 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+body {
+  background: #17120e;
+  color: #f4eee2;
+  font-family: "Avenir Next", Avenir, sans-serif;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.disk-map,
+.canvas-host {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.canvas-host canvas {
+  display: block;
+  cursor: crosshair;
+}
+.load-status {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 6px 9px;
+  background: #16120dc9;
+  color: #f3e9d5;
+  font-size: 11px;
+  pointer-events: none;
+}
+.back-button {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 38px;
+  height: 36px;
+  background: #191611e8;
+  color: #fff;
+  border: 1px solid #ffffff45;
+  border-radius: 5px;
+  font-size: 22px;
+  box-shadow: 0 2px 12px #0005;
+}
+.file-info {
+  position: fixed;
+  width: 352px;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  background: #191713f5;
+  border: 1px solid #c8b79366;
+  box-shadow: 0 12px 50px #0009;
+  border-radius: 7px;
+  padding: 19px 20px;
+  backdrop-filter: blur(12px);
+  z-index: 5;
+}
+.file-info small {
+  color: #c9bb9e;
+  font-size: 11px;
+}
+.file-info h1 {
+  font-size: 18px;
+  line-height: 1.3;
+  margin: 8px 22px 12px 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+.file-bytes {
+  font-size: 26px;
+  font-weight: 500;
+  color: #ffcf76;
+}
+.file-path {
+  font:
+    11px/1.5 Menlo,
+    monospace;
+  overflow-wrap: anywhere;
+  color: #e1d7c5;
+  user-select: all;
+  margin: 14px 0;
+}
+.secondary {
+  color: #bcad95;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.close-info {
+  position: absolute;
+  right: 9px;
+  top: 8px;
+  border: 0;
+  background: none;
+  color: #d7c9b4;
+  font-size: 24px;
+  padding: 0 5px;
+}
+.explore-button {
+  background: #f4c66f;
+  color: #251b0f;
+  border: 0;
+  padding: 9px 12px;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.file-info details {
+  color: #a99b86;
+  font-size: 10px;
+  line-height: 1.5;
+  margin-top: 17px;
+}
+.file-info summary {
+  cursor: pointer;
+}
+.file-info details p {
+  margin-bottom: 0;
+}
+button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+.navigation {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 3;
+}
+.navigation .back-button {
+  position: static;
+}
+.root-button {
+  width: 38px;
+  height: 36px;
+  background: #191611e8;
+  color: #fff;
+  border: 1px solid #ffffff45;
+  border-radius: 5px;
+  font-size: 22px;
+}
+.folder-contents input {
+  display: block;
+  width: 100%;
+  margin: 9px 0;
+  padding: 8px;
+  background: #11100d;
+  color: #f4eee2;
+  border: 1px solid #8c7b5d;
+  border-radius: 3px;
+  font: inherit;
+}
+.child-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #ffffff18;
+  background: none;
+  color: #ede4d5;
+  padding: 8px 0;
+  text-align: left;
+  font-size: 11px;
+}
+.child-row span:first-child {
+  overflow-wrap: anywhere;
+}
+.child-row span:last-child {
+  flex-shrink: 0;
+  color: #cabca2;
+}
+.child-row:hover {
+  background: #ffffff09;
+}
+.show-more {
+  color: #f4c66f;
+  background: none;
+  border: 0;
+  margin-top: 9px;
+  font-size: 11px;
+}
+.file-info:focus {
+  outline: none;
+}
+.explore-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+canvas:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -3px;
+}

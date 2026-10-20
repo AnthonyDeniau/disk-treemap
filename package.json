@@ -1,0 +1,35 @@
+{
+  "name": "disk-treemap-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The offline viewer bundled with the disk-treemap Python CLI",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite --config web/vite.config.ts",
+    "build": "tsc --noEmit && vite build --config web/vite.config.ts",
+    "test": "node --experimental-strip-types --test web/tests/*.test.mjs",
+    "test:e2e": "playwright test",
+    "format": "prettier --write web scripts package.json tsconfig.json playwright.config.ts",
+    "format:check": "prettier --check web scripts package.json tsconfig.json playwright.config.ts"
+  },
+  "dependencies": {
+    "d3-hierarchy": "3.1.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/d3-hierarchy": "^3.1.7",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "prettier": "^3.6.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "vite-plugin-singlefile": "2.3.4"
+  }
+}

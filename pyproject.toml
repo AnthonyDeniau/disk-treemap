@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "disk-treemap"
+version = "0.1.0"
+description = "Turn a directory into an interactive, offline HTML disk treemap."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+authors = [{name = "Anthony Deniau"}]
+keywords = ["disk-usage", "treemap", "cli", "offline", "filesystem"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: System :: Filesystems",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/AnthonyDeniau/disk-treemap"
+Issues = "https://github.com/AnthonyDeniau/disk-treemap/issues"
+Source = "https://github.com/AnthonyDeniau/disk-treemap"
+
+[project.scripts]
+disk-treemap = "disk_treemap.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.11", "build>=1.2", "twine>=6"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+disk_treemap = ["assets/viewer.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
