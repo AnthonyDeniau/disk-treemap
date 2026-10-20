@@ -358,7 +358,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "build", marker = "extra == 'dev'", specifier = ">=1.2" },
+    { name = "build", marker = "extra == 'dev'", specifier = ">=1.6.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8,<10" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.17.1" },
     { name = "twine", marker = "extra == 'dev'", specifier = ">=6" },
