@@ -1,6 +1,8 @@
 name: CI
 on:
   push:
+    branches: [main]
+    tags: ['v*']
   pull_request:
 permissions:
   contents: read
@@ -57,3 +59,14 @@ jobs:
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: uv run -- npm run test:e2e
       - run: uv run python scripts/check_public.py
+  required:
+    name: All checks
+    if: always()
+    needs: [python, viewer]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every test job to succeed
+        env:
+          PYTHON_RESULT: ${{ needs.python.result }}
+          VIEWER_RESULT: ${{ needs.viewer.result }}
+        run: test "$PYTHON_RESULT" = success && test "$VIEWER_RESULT" = success
