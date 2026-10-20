@@ -76,6 +76,8 @@ class Scanner:
         self._last_progress = time.monotonic()
         self._hard_links: set[tuple[int, int]] = set()
         self._root_device = root.stat().st_dev
+        # On Windows, DirEntry.stat may return zero for inode/device/link count.
+        self._stat_by_path = os.name == "nt"
 
     def exclusion(self, path: Path) -> str | None:
         if path in self.ignored_paths:
@@ -141,7 +143,7 @@ class Scanner:
             node["children"] = frame.children
         return node, frame.nodes, frame.height
 
-    def _file(self, path: Path, info: os.stat_result) -> Node:
+    def _file(self, path: Path, info: os.stat_result, *, is_alias: bool = False) -> Node:
         self.stats.files += 1
         size = info.st_size
         if self.options.size == "allocated":
@@ -151,7 +153,7 @@ class Scanner:
             else:
                 size = blocks * 512
         node: Node = {"name": path.name, "kind": "file", "value": size, "logicalSize": info.st_size}
-        if stat.S_ISLNK(info.st_mode):
+        if stat.S_ISLNK(info.st_mode) or is_alias:
             node["isSymlink"] = True
         elif info.st_nlink > 1 and not self.options.count_hard_links:
             identity = (info.st_dev, info.st_ino)
@@ -193,8 +195,17 @@ class Scanner:
                             child = self._excluded(entry.name, reason)
                         else:
                             try:
-                                info = entry.stat(follow_symlinks=False)
-                                if stat.S_ISDIR(info.st_mode):
+                                info = (
+                                    os.stat(path, follow_symlinks=False)
+                                    if self._stat_by_path
+                                    else entry.stat(follow_symlinks=False)
+                                )
+                                is_junction = getattr(info, "st_reparse_tag", 0) == getattr(
+                                    stat, "IO_REPARSE_TAG_MOUNT_POINT", 0xA0000003
+                                )
+                                if is_junction:
+                                    child = self._file(path, info, is_alias=True)
+                                elif stat.S_ISDIR(info.st_mode):
                                     if (
                                         self.options.one_file_system
                                         and info.st_dev != self._root_device

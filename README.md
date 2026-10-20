@@ -166,7 +166,7 @@ npm test
 npx playwright install chromium
 npm run test:e2e
 uv build
-uv run twine check dist/*
+uv run twine check dist/*.whl dist/*.tar.gz
 ```
 
 `npm run dev` previews synthetic data only. The development config relaxes CSP
